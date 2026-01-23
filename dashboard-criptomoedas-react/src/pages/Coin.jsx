@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { api } from "../services/api";
+import "./Coin.css";
 
 export default function Coin() {
   const { id } = useParams();
@@ -29,22 +30,50 @@ export default function Coin() {
   if (error) return <h2>{error}</h2>;
 
   return (
-    <div>
-      <Link to="/"> Back</Link>
+  <div className="coin-container">
+    <Link to="/" className="back-link">← Voltar</Link>
 
-      <h1>{coin.name}</h1>
-      <img src={coin.image.large} alt={coin.name} width="80" />
+    <div className="coin-card">
+      <div className="coin-header">
+        <img src={coin.image.large} alt={coin.name} />
+        <h1>{coin.name}</h1>
+      </div>
 
-      <p>Rank: {coin.market_cap_rank}</p>
-      <p>
-        Current price: R$ {coin.market_data.current_price.brl}
-      </p>
-      <p>
-        Market cap: R$ {coin.market_data.market_cap.brl}
-      </p>
-      <p>
-        24h change: {coin.market_data.price_change_percentage_24h}%
-      </p>
+      <div className="coin-grid">
+        <div className="coin-box">
+          <span>Rank</span>
+          <strong>#{coin.market_cap_rank}</strong>
+        </div>
+
+        <div className="coin-box">
+          <span>Preço atual</span>
+          <strong>
+            R$ {coin.market_data.current_price.brl.toLocaleString("pt-BR")}
+          </strong>
+        </div>
+
+        <div className="coin-box">
+          <span>Market Cap</span>
+          <strong>
+            R$ {coin.market_data.market_cap.brl.toLocaleString("pt-BR")}
+          </strong>
+        </div>
+
+        <div className="coin-box">
+          <span>Variação 24h</span>
+          <strong
+            className={
+              coin.market_data.price_change_percentage_24h >= 0
+                ? "positive"
+                : "negative"
+            }
+          >
+            {coin.market_data.price_change_percentage_24h.toFixed(2)}%
+          </strong>
+        </div>
+      </div>
     </div>
-  );
+  </div>
+);
+
 }
